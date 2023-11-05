@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,24 +15,22 @@ public class app {
         System.out.println("\tWelcome to the ToDo App");
         Scanner scanner = new Scanner(System.in);
         List<String> todos = new ArrayList<String>();
+        String filename = "todo.txt";
 
         // check if todo.txt exist
-        File directory = new File(".");
-        File[] files = directory.listFiles();
-        System.out.println(files);
-        boolean foundFile = false;
-        for (File file : files) {
-            if (file.getName() == "todo.txt") {
-                foundFile = true;
-                break;
+        File file = new File(filename);
+        if (file.exists()) {
+        } else {
+            try {
+                FileWriter writer = new FileWriter(file);
+                writer.write("");
+                writer.close();
+            } catch (IOException e) {
+                System.out.println("An error occurred" + e.getMessage());
             }
         }
-        if (!foundFile) {
-            File file = new File("myfile.txt");
-            file.createNewFile();
-        }
 
-        todos = fileRead("todo.txt", todos);
+        todos = fileRead(filename, todos);
         int option;
         while (true) {
             System.out.println("Choose an option:\n1. Add\n2. Delete\n3. Show");
@@ -41,14 +41,23 @@ public class app {
                         System.out.println("Add todo item:");
                         String todo = scanner.next();
                         todos.add(todo);
+                        // write to txt file
+                        fileWrite(filename, todos);
                         System.out.printf("\t----------\n");
-                        System.out.println("\t*Done*");
+                        System.out.println("\t*Added*");
                         System.out.printf("\t----------\n");
                         break;
                     case 2:
                         System.out.println("What item no. to delete?");
                         int n = scanner.nextInt();
+                        if (n > todos.size() || n <= 0) {
+                            System.out.printf("\t----------\n");
+                            System.out.println("\t*Item not exist*");
+                            System.out.printf("\t----------\n");
+                            break;
+                        }
                         todos.remove(n-1);
+                        fileWrite(filename, todos);
                         System.out.printf("\t----------\n");
                         System.out.println("\t*Deleted*");
                         System.out.printf("\t----------\n");
@@ -74,11 +83,25 @@ public class app {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 todos.add(line);
-        }
+            }
         } catch (FileNotFoundException e) {
             // Handle the exception
             System.out.println("The file does not exist.");
         }
         return todos;
+    }
+
+    public static void fileWrite(String filePath, List<String> todos) {
+        File file = new File(filePath);
+        try {
+            FileWriter writer = new FileWriter(file);
+            for (String todo : todos) {
+                String formattedTodo = String.format("%s\n", todo);
+                writer.write(formattedTodo);
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred" + e.getMessage());
+        }
     }
 }
