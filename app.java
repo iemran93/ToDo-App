@@ -36,16 +36,16 @@ public class app {
         }
 
         todos = fileRead(filename, todos);
-        int option;
+        String option;
         boolean running = true;
         while (running) {
             System.out.println("Choose an option:\n1. Add\n2. Delete\n3. Show\n4. Exit");
-            option = scanner.nextInt();
-            if (option == 1 || option == 2 || option == 3 || option == 4) {
+            option = scanner.nextLine();
+            if (option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4")) {
                 switch (option) {
-                    case 1:
+                    case "1":
                         System.out.println("Add todo item:");
-                        String todo = scanner.next();
+                        String todo = scanner.nextLine();
                         todos.add(todo);
                         // write to txt file
                         fileWrite(filename, todos);
@@ -53,30 +53,37 @@ public class app {
                         System.out.println("\t*Added*");
                         System.out.printf("\t----------\n");
                         break;
-                    case 2:
+                    case "2":
                         System.out.println("What item no. to delete?");
-                        int n = scanner.nextInt();
-                        if (n > todos.size() || n <= 0) {
+                        try {
+                            String nS = scanner.nextLine();
+                            int n = Integer.parseInt(nS);
+                            if (n > todos.size() || n <= 0) {
+                                System.out.printf("\t----------\n");
+                                System.out.println("\t*Item not exist*");
+                                System.out.printf("\t----------\n");
+                                break;
+                            }
+                            todos.remove(n - 1);
+                            fileWrite(filename, todos);
                             System.out.printf("\t----------\n");
-                            System.out.println("\t*Item not exist*");
+                            System.out.println("\t*Deleted*");
                             System.out.printf("\t----------\n");
                             break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("\t*Invalid input*");
+                            break;
                         }
-                        todos.remove(n - 1);
-                        fileWrite(filename, todos);
-                        System.out.printf("\t----------\n");
-                        System.out.println("\t*Deleted*");
-                        System.out.printf("\t----------\n");
-                        break;
-                    case 3:
+                    case "3":
                         System.out.printf("\t----------\n");
                         for (int i = 0; i < todos.size(); i++) {
                             System.out.printf("\t%d. %s\n", i + 1, todos.get(i));
                         }
                         System.out.printf("\t----------\n");
                         break;
-                    case 4:
+                    case "4":
                         running = false;
+                        scanner.close();
                         break;
                 }
             } else {
