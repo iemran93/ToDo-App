@@ -10,7 +10,7 @@ This is a simple to do app that run in the Command Line. It will create a todo.t
 
  You Can:
  * Add items to the todo list.
- * Delete items by refrecing the item no.
+ * Delete items by referencing the item no.
  * Show all the todo list.
 
  ## Examples
@@ -34,6 +34,9 @@ Choose an option:
         2. Soccer
         ----------
 ```
+
+## Prerequisites
+Standard packages only used
 
 ## Author
 
