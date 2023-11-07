@@ -9,6 +9,11 @@ import java.util.Scanner;
 /**
  * main
  */
+/**
+ * Author
+ * Emran Marei
+ * https://github.com/iemran93
+ */
 public class app {
 
     public static void main(String[] args) {
@@ -32,10 +37,11 @@ public class app {
 
         todos = fileRead(filename, todos);
         int option;
-        while (true) {
-            System.out.println("Choose an option:\n1. Add\n2. Delete\n3. Show");
+        boolean running = true;
+        while (running) {
+            System.out.println("Choose an option:\n1. Add\n2. Delete\n3. Show\n4. Exit");
             option = scanner.nextInt();
-            if (option == 1 || option == 2 || option == 3) {
+            if (option == 1 || option == 2 || option == 3 || option == 4) {
                 switch (option) {
                     case 1:
                         System.out.println("Add todo item:");
@@ -56,7 +62,7 @@ public class app {
                             System.out.printf("\t----------\n");
                             break;
                         }
-                        todos.remove(n-1);
+                        todos.remove(n - 1);
                         fileWrite(filename, todos);
                         System.out.printf("\t----------\n");
                         System.out.println("\t*Deleted*");
@@ -65,9 +71,12 @@ public class app {
                     case 3:
                         System.out.printf("\t----------\n");
                         for (int i = 0; i < todos.size(); i++) {
-                            System.out.printf("\t%d. %s\n",i+1 , todos.get(i));
+                            System.out.printf("\t%d. %s\n", i + 1, todos.get(i));
                         }
                         System.out.printf("\t----------\n");
+                        break;
+                    case 4:
+                        running = false;
                         break;
                 }
             } else {
