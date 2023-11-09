@@ -39,9 +39,10 @@ public class app {
         String option;
         boolean running = true;
         while (running) {
-            System.out.println("Choose an option:\n1. Add\n2. Delete\n3. Show\n4. Exit");
+            System.out.println("Choose an option:\n1. Add\n2. Done\n3. Delete\n4. Show\n5. Exit");
             option = scanner.nextLine();
-            if (option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4")) {
+            if (option.equals("1") || option.equals("2") ||
+                    option.equals("3") || option.equals("4") || option.equals("5")) {
                 switch (option) {
                     case "1":
                         System.out.println("Add todo item:");
@@ -49,45 +50,60 @@ public class app {
                         todos.add(todo);
                         // write to txt file
                         fileWrite(filename, todos);
-                        System.out.printf("\t----------\n");
-                        System.out.println("\t*Added*");
-                        System.out.printf("\t----------\n");
+                        System.out.println(infoString("Added"));
                         break;
                     case "2":
+                        DoneItems doneItems = new DoneItems();
+                        System.out.println("Great! What item no. ?");
+                        try {
+                            String nS = scanner.nextLine();
+                            int n = Integer.parseInt(nS);
+                            if (n > todos.size() || n <= 0) {
+                                System.out.println("Item not exist");
+                                break;
+                            }
+                            String item = todos.get(n - 1);
+                            doneItems.addDone();
+                            todos.remove(n - 1);
+                            fileWrite(filename, todos);
+                            System.out.println("Deleted");
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input");
+                            break;
+                        }
+                    case "3":
                         System.out.println("What item no. to delete?");
                         try {
                             String nS = scanner.nextLine();
                             int n = Integer.parseInt(nS);
                             if (n > todos.size() || n <= 0) {
-                                System.out.printf("\t----------\n");
-                                System.out.println("\t*Item not exist*");
-                                System.out.printf("\t----------\n");
+                                System.out.println("Item not exist");
                                 break;
                             }
                             todos.remove(n - 1);
                             fileWrite(filename, todos);
-                            System.out.printf("\t----------\n");
-                            System.out.println("\t*Deleted*");
-                            System.out.printf("\t----------\n");
+                            System.out.println("Deleted");
                             break;
                         } catch (NumberFormatException e) {
-                            System.out.println("\t*Invalid input*");
+                            System.out.println("Invalid input");
                             break;
                         }
-                    case "3":
-                        System.out.printf("\t----------\n");
+                    case "4":
+                        System.out.printf("\t-----\n");
                         for (int i = 0; i < todos.size(); i++) {
                             System.out.printf("\t%d. %s\n", i + 1, todos.get(i));
                         }
-                        System.out.printf("\t----------\n");
+                        System.out.printf("\t-----\n");
                         break;
-                    case "4":
+                    case "5":
                         running = false;
                         scanner.close();
+                        System.out.println(infoString("bye bye!"));
                         break;
                 }
             } else {
-                System.out.println("\t*Enter a valid option!*");
+                System.out.println("Enter a valid option");
             }
         }
     }
@@ -119,5 +135,9 @@ public class app {
         } catch (IOException e) {
             System.out.println("An error occurred" + e.getMessage());
         }
+    }
+
+    public static String infoString(String txt) {
+        return String.format("\t-----\n\t*%s*\n\t-----\n", txt);
     }
 }
