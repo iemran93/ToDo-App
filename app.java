@@ -39,10 +39,10 @@ public class app {
         String option;
         boolean running = true;
         while (running) {
-            System.out.println("Choose an option:\n1. Add\n2. Done\n3. Delete\n4. Show\n5. Exit");
+            System.out.println("Choose an option:\n1. Add\n2. Delete\n3. Show\n4. Exit");
             option = scanner.nextLine();
             if (option.equals("1") || option.equals("2") ||
-                    option.equals("3") || option.equals("4") || option.equals("5")) {
+                    option.equals("3") || option.equals("4")) {
                 switch (option) {
                     case "1":
                         System.out.println("Add todo item:");
@@ -53,26 +53,6 @@ public class app {
                         System.out.println(infoString("Added"));
                         break;
                     case "2":
-                        DoneItems doneItems = new DoneItems();
-                        System.out.println("Great! What item no. ?");
-                        try {
-                            String nS = scanner.nextLine();
-                            int n = Integer.parseInt(nS);
-                            if (n > todos.size() || n <= 0) {
-                                System.out.println("Item not exist");
-                                break;
-                            }
-                            String item = todos.get(n - 1);
-                            doneItems.addDone();
-                            todos.remove(n - 1);
-                            fileWrite(filename, todos);
-                            System.out.println("Deleted");
-                            break;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input");
-                            break;
-                        }
-                    case "3":
                         System.out.println("What item no. to delete?");
                         try {
                             String nS = scanner.nextLine();
@@ -89,14 +69,14 @@ public class app {
                             System.out.println("Invalid input");
                             break;
                         }
-                    case "4":
+                    case "3":
                         System.out.printf("\t-----\n");
                         for (int i = 0; i < todos.size(); i++) {
                             System.out.printf("\t%d. %s\n", i + 1, todos.get(i));
                         }
                         System.out.printf("\t-----\n");
                         break;
-                    case "5":
+                    case "4":
                         running = false;
                         scanner.close();
                         System.out.println(infoString("bye bye!"));
